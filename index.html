@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Form</title>
+    <title>Weather and Greeting Form</title>
 </head>
 <body>
     <h1>Weather and Greeting Form</h1>
@@ -11,8 +11,8 @@
         <label for="visitor_name">Name:</label>
         <input type="text" id="visitor_name" name="visitor_name" required><br><br>
 
-       
-
+        <input type="hidden" id="client_ip" name="client_ip"> <!-- Hidden input for IP address -->
+        
         <input type="submit" value="Submit">
     </form>
 
@@ -22,14 +22,14 @@
             try {
                 let response = await fetch('https://api.ipify.org?format=json');
                 let data = await response.json();
-                document.getElementById('client_ip').value = data.ip;
+                document.getElementById('client_ip').value = data.ip; // Set IP address in hidden input
             } catch (error) {
                 console.error('Error fetching IP address:', error);
             }
         }
 
-        // Call the function to get the IP address
-        getClientIp();
+        // Call the function to get the IP address when the page loads
+        window.onload = getClientIp;
     </script>
 </body>
 </html>

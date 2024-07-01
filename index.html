@@ -35,22 +35,18 @@
             if (visitorName.length != 0) {
                 const xmlhttp = new XMLHttpRequest();
                 xmlhttp.onload = function() {
-                    if (this.status == 200) {
-                        const response = JSON.parse(this.responseText);
-                        if (response.error) {
-                            document.getElementById("response").innerHTML = `<p>Error: ${response.error}</p>`;
-                        } else {
-                            document.getElementById("response").innerHTML = `
-                                <p>Client IP: ${response.client_ip}</p>
-                                <p>Location: ${response.location}</p>
-                                <p>Greeting: ${response.greeting}</p>
-                            `;
-                        }
+                    const response = JSON.parse(this.responseText);
+                    if (response.error) {
+                        document.getElementById("response").innerHTML = `<p>Error: ${response.error}</p>`;
                     } else {
-                        document.getElementById("response").innerHTML = `<p>Error: Server responded with status ${this.status}</p>`;
+                        document.getElementById("response").innerHTML = `
+                            <p>Client IP: ${response.client_ip}</p>
+                            <p>Location: ${response.location}</p>
+                            <p>Greeting: ${response.greeting}</p>
+                        `;
                     }
                 }
-                xmlhttp.open("GET", "http://kendrick.infinityfreeapp.com/weather-app.php?name=" + encodeURIComponent(visitorName), true);
+                xmlhttp.open("GET", `http://kendrick.infinityfreeapp.com/weather-app.php?name=${visitorName}`, true);
                 xmlhttp.send();
             }
         }

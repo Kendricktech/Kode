@@ -25,16 +25,19 @@
         <input type="text" id="visitor_name" name="visitor_name" required><br><br>
         
         <input type="button" onclick="Get_response()" value="Submit">
-    </form>
+    </form>  
 
     <div id="response"></div> <!-- Container to display server response -->
 
     <script>
         function Get_response() {
+            console.log("request sent");
+
             const visitorName = document.getElementById('visitor_name').value;
-            if (visitorName.length != 0) {
-                const xmlhttp = new XMLHttpRequest();
-                xmlhttp.onload = function() {
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.onload = function() {
+                console.log(this.responseText); // Debug: Log the raw response
+                try {
                     const response = JSON.parse(this.responseText);
                     if (response.error) {
                         document.getElementById("response").innerHTML = `<p>Error: ${response.error}</p>`;
@@ -45,10 +48,12 @@
                             <p>Greeting: ${response.greeting}</p>
                         `;
                     }
+                } catch (e) {
+                    document.getElementById("response").innerHTML = `<p>Error parsing JSON response: ${e}</p>`;
                 }
-                xmlhttp.open("GET", `http://kendrick.infinityfreeapp.com/weather-app.php?name=${visitorName}`, true);
-                xmlhttp.send();
-            }
+            };
+            xmlhttp.open("GET", "http://kendrick.infinityfreeapp.com/weather-app.php?visitor_name=" + encodeURIComponent(visitorName), true);
+            xmlhttp.send();
         }
     </script>
 </body>

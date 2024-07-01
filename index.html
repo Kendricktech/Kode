@@ -52,7 +52,7 @@
                     document.getElementById("response").innerHTML = `<p>Error parsing JSON response: ${e}</p>`;
                 }
             };
-            xmlhttp.open("GET", "http://kendrick.infinityfreeapp.com/weather-app.php?visitor_name=" + encodeURIComponent(visitorName), true);
+            xmlhttp.open("GET", "https://kendrick.infinityfreeapp.com/weather-app.php?visitor_name=" + encodeURIComponent(visitorName), true);
             xmlhttp.send();
         }
     </script>

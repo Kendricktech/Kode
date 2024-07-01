@@ -4,32 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather and Greeting Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
     <h1>Weather and Greeting Form</h1>
-    <form id="weatherForm" action="http://kendrick.infinityfreeapp.com/weather-app.php" method="get">
+    <form id="weatherForm" onsubmit="return false;">
         <label for="visitor_name">Name:</label>
         <input type="text" id="visitor_name" name="visitor_name" required><br><br>
-
-        <input type="hidden" id="client_ip" name="client_ip"> <!-- Hidden input for IP address -->
         
-        <input type="submit" value="Submit">
+        <input type="button" onclick="Get_response()" value="Submit">
     </form>
 
+    <div id="response"></div> <!-- Container to display server response -->
+
     <script>
-        // Function to get IP address using ipify API
-        async function getClientIp() {
-            try {
-                let response = await fetch('https://api.ipify.org?format=json');
-                let data = await response.json();
-                document.getElementById('client_ip').value = data.ip; // Set IP address in hidden input
-            } catch (error) {
-                console.error('Error fetching IP address:', error);
+        function Get_response() {
+            const visitorName = document.getElementById('visitor_name').value;
+            if (visitorName.length != 0) {
+                const xmlhttp = new XMLHttpRequest();
+                xmlhttp.onload = function() {
+                    const response = JSON.parse(this.responseText);
+                    if (response.error) {
+                        document.getElementById("response").innerHTML = `<p>Error: ${response.error}</p>`;
+                    } else {
+                        document.getElementById("response").innerHTML = `
+                            <p>Client IP: ${response.client_ip}</p>
+                            <p>Location: ${response.location}</p>
+                            <p>Greeting: ${response.greeting}</p>
+                        `;
+                    }
+                }
+                xmlhttp.open("GET", `http://kendrick.infinityfreeapp.com/weather-app.php?name=${visitorName}`, true);
+                xmlhttp.send();
             }
         }
-
-        // Call the function to get the IP address when the page loads
-        window.onload = getClientIp;
     </script>
 </body>
 </html>
